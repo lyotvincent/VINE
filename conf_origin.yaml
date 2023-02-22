@@ -1,0 +1,418 @@
+preprocessing:
+    enable: True
+    fastp:
+        #-6: indicate the input is using phred64 scoring (it'll be converted to phred33, so the output will still be phred33)
+        --phred64: ~
+        #-V: output verbose log information (i.e. when every 1M reads are processed).
+        -V: ~
+        #-A: adapter trimming is enabled by default. If this option is specified, adapter trimming is disabled
+        -A: ~
+        #--adapter_sequence: the adapter for read1. For SE data, if not specified, the adapter will be auto-detected. For PE data, this is used if R1/R2 are found not overlapped. (string [=auto])
+        --adapter_sequence: ~
+        #--adapter_sequence_r2: the adapter for read2 (PE data only). This is used if R1/R2 are found not overlapped. If not specified, it will be the same as <adapter_sequence> (string [=auto])
+        --adapter_sequence_r2: ~
+        #--adapter_fasta: specify a FASTA file to trim both read1 and read2 (if PE) by all the sequences in this FASTA file (string [=])
+        --adapter_fasta: ~
+        #--detect_adapter_for_pe: by default, the auto-detection for adapter is for SE data input only, turn on this option to enable it for PE data.
+        --detect_adapter_for_pe: ~
+        #-f: trimming how many bases in front for read1 default is 0 (int [=0])
+        -f: ~
+        #-t: trimming how many bases in tail for read1 default is 0 (int [=0])
+        -t: ~
+        #-b: if read1 is longer than max_len1 then trim read1 at its tail to make it as long as max_len1. Default 0 means no limitation (int [=0])
+        -b: ~
+        #-F: trimming how many bases in front for read2. If it's not specified, it will follow read1's settings (int [=0])
+        -F: ~
+        #-T: trimming how many bases in tail for read2. If it's not specified, it will follow read1's settings (int [=0])
+        -T: ~
+        #-B: if read2 is longer than max_len2, then trim read2 at its tail to make it as long as max_len2. Default 0 means no limitation. If it's not specified, it will follow read1's settings (int [=0])
+        -B: ~
+        #--trim_poly_g: force polyG tail trimming, by default trimming is automatically enabled for Illumina NextSeq/NovaSeq data
+        --trim_poly_g: ~
+        #--poly_g_min_len: the minimum length to detect polyG in the read tail. 10 by default. (int [=10])
+        --poly_g_min_len: ~
+        #-G: disable polyG tail trimming, by default trimming is automatically enabled for Illumina NextSeq/NovaSeq data
+        -G: ~
+        #--trim_poly_x: enable polyX trimming in 3' ends.
+        --trim_poly_x: ~
+        #--poly_x_min_len: the minimum length to detect polyX in the read tail. 10 by default. (int [=10])
+        --poly_x_min_len: ~
+        #-5: move a sliding window from front (5') to tail, drop the bases in the window if its mean quality < threshold, stop otherwise.
+        --cut_by_quality5: ~
+        #-3: move a sliding window from tail (3') to front, drop the bases in the window if its mean quality < threshold, stop otherwise.
+        --cut_by_quality3: ~
+        #-r: move a sliding window from front to tail, if meet one window with mean quality < threshold, drop the bases in the window and the right part, and then stop.
+        -r: ~
+        #-W: the window size option shared by cut_front, cut_tail or cut_sliding. Range: 1~1000 default: 4 (int [=4])
+        -W: ~
+        #--cut_mean_quality: the mean quality requirement option shared by cut_front, cut_tail or cut_sliding. Range: 1~36 default: 20 (Q20) (int [=20])
+        --cut_mean_quality: ~
+        #--cut_front_window_size: the window size option of cut_front, default to cut_window_size if not specified (int [=4])
+        --cut_front_window_size: ~
+        #--cut_front_mean_quality: the mean quality requirement option for cut_front, default to cut_mean_quality if not specified (int [=20])
+        --cut_front_mean_quality: ~
+        #--cut_tail_window_size: the window size option of cut_tail, default to cut_window_size if not specified (int [=4])
+        --cut_tail_window_size: ~
+        #--cut_tail_mean_quality: the mean quality requirement option for cut_tail, default to cut_mean_quality if not specified (int [=20])
+        --cut_tail_mean_quality: ~
+        #--cut_right_window_size: the window size option of cut_right, default to cut_window_size if not specified (int [=4])
+        --cut_right_window_size: ~
+        #--cut_right_mean_quality: the mean quality requirement option for cut_right, default to cut_mean_quality if not specified (int [=20])
+        --cut_right_mean_quality: ~
+        #-Q: quality filtering is enabled by default. If this option is specified, quality filtering is disabled
+        -Q: ~
+        #-q: the quality value that a base is qualified. Default 15 means phred quality >=Q15 is qualified. (int [=15])
+        -q: ~
+        #-u: how many percents of bases are allowed to be unqualified (0~100). Default 40 means 40% (int [=40])
+        -u: ~
+        #-n: if one read's number of N base is >n_base_limit, then this read/pair is discarded. Default is 5 (int [=5])
+        -n: ~
+        #-e: if one read's average quality score <avg_qual, then this read/pair is discarded. Default 0 means no requirement (int [=0])
+        -e: ~
+        #-L: length filtering is enabled by default. If this option is specified, length filtering is disabled
+        -L: ~
+        #--length_required: reads shorter than length_required will be discarded, default is 15. (int [=15])
+        --length_required: ~
+        #--length_limit: reads longer than length_limit will be discarded, default 0 means no limitation. (int [=0])
+        --length_limit: ~
+        #--low_complexity_filter: enable low complexity filter. The complexity is defined as the percentage of base that is different from its next base (base[i] != base[i+1]).
+        --low_complexity_filter: ~
+        #--complexity_threshold: the threshold for low complexity filter (0~100). Default is 30 which means 30% complexity is required. (int [=30])
+        --complexity_threshold: ~
+        #--filter_by_index1: specify a file contains a list of barcodes of index1 to be filtered out, one barcode per line (string [=])
+        --filter_by_index1: ~
+        #--filter_by_index2: specify a file contains a list of barcodes of index2 to be filtered out, one barcode per line (string [=])
+        --filter_by_index2: ~
+        #--filter_by_index_threshold: the allowed difference of index barcode for index filtering, default 0 means completely identical. (int [=0])
+        --filter_by_index_threshold: ~
+        #--correction: enable base correction in overlapped regions (only for PE data), default is disabled
+        --correction: ~
+        #--overlap_len_require: the minimum length to detect overlapped region of PE reads. This will affect overlap analysis based PE merge, adapter trimming and correction. 30 by default. (int [=30])
+        --overlap_len_require: ~
+        #--overlap_diff_limit: the maximum number of mismatched bases to detect overlapped region of PE reads. This will affect overlap analysis based PE merge, adapter trimming and correction. 5 by default. (int [=5])
+        --overlap_diff_limit: ~
+        #--overlap_diff_percent_limit: the maximum percentage of mismatched bases to detect overlapped region of PE reads. This will affect overlap analysis based PE merge, adapter trimming and correction. Default 20 means 20%. (int [=20])
+        --overlap_diff_percent_limit: ~
+        #--umi: enable unique molecular identifier (UMI) preprocessing
+        --umi: ~
+        #--umi_loc: specify the location of UMI, can be (index1/index2/read1/read2/per_index/per_read, default is none (string [=])
+        --umi_loc: ~
+        #--umi_len: if the UMI is in read1/read2, its length should be provided (int [=0])
+        --umi_len: ~
+        #--umi_prefix: if specified, an underline will be used to connect prefix and UMI (i.e. prefix=UMI, UMI=AATTCG, final=UMI_AATTCG). No prefix by default (string [=])
+        --umi_prefix: ~
+        #--umi_skip: if the UMI is in read1/read2, fastp can skip several bases following UMI, default is 0 (int [=0])
+        --umi_skip: ~
+        #-p: enable overrepresented sequence analysis.
+        -p: ~
+        #-P: one in (--overrepresentation_sampling) reads will be computed for overrepresentation analysis (1~10000), smaller is slower, default is 20. (int [=20])
+        -P: ~
+        #-w: worker thread number, default is 2 (int [=2])
+        -w: ~
+identification:
+    enable: True
+    number_of_candidate_similar_genome: 20
+    assembly:
+        enable: True
+        megahit:
+            enable: True
+            #--min-count: <int>          minimum multiplicity for filtering (k_min+1)-mers [2]
+            --min-count: ~
+            #--k-list: <int,int,..>   comma-separated list of kmer size all must be odd, in the range 15-255, increment <= 28) [2129,39,59,79,99,119,141]
+            --k-list: ~
+            #--no-mercy: do not add mercy kmers
+            --no-mercy: ~
+            #--bubble-level: <int>          intensity of bubble merging (0-2), 0 to disable [2]
+            --bubble-level: ~
+            #--merge-level: <l,s>          merge complex bubbles of length <= l*kmer_size and similarity >= s [200.95]
+            --merge-level: ~
+            #--prune-level: <int>          strength of low depth pruning (0-3) [2]
+            --prune-level: ~
+            #--prune-depth: <int>          remove unitigs with avg kmer depth less than this value [2]
+            --prune-depth: ~
+            #--low-local-ratio: <float>        ratio threshold to define low local coverage contigs [0.2]
+            --low-local-ratio: ~
+            #--max-tip-len: <int>          remove tips less than this value [2*k]
+            --max-tip-len: ~
+            #--no-local: disable local assembly
+            --no-local: ~
+            #--kmin-1pass: use 1pass mode to build SdBG of k_min
+            --kmin-1pass: ~
+            #-m: <float>        max memory in byte to be used in SdBG construction (if set between 0-1 fraction of the machine's total memory) [0.9]
+            -m: ~
+            #--mem-flag: <int>          SdBG builder memory mode 0: minimum; 1: moderate; others: use all memory specified by '-m/--memory' [1]
+            --mem-flag: ~
+            #-t: <int>          number of CPU threads [# of logical processors]
+            -t: ~
+            #--no-hw-accel: run MEGAHIT without BMI2 and POPCNT hardware instructions
+            --no-hw-accel: ~
+            #--min-contig-len: <int>          minimum length of contigs to output [200]
+            --min-contig-len: ~
+        canu:
+            enable: True
+            #genomeSize=: The genome size should be your best guess of the haploid genome size of what is being assembled.  It is used primarily to estimate coverage in reads, NOT as the desired assembly size.  Fractional values are allowed: '4.7m' equals '4700k' equals '4700000'
+            genomeSize=: ~
+            -pacbio-raw: ~
+            -pacbio-corrected: ~
+            -nanopore-raw: ~
+            -nanopore-corrected: ~
+denovo:
+    enable: True
+    assembly:
+        enable: True
+        megahit:
+            enable: True
+            #--min-count: <int>          minimum multiplicity for filtering (k_min+1)-mers [2]
+            --min-count: ~
+            #--k-list: <int,int,..>   comma-separated list of kmer size all must be odd, in the range 15-255, increment <= 28) [2129,39,59,79,99,119,141]
+            --k-list: ~
+            #--no-mercy: do not add mercy kmers
+            --no-mercy: ~
+            #--bubble-level: <int>          intensity of bubble merging (0-2), 0 to disable [2]
+            --bubble-level: ~
+            #--merge-level: <l,s>          merge complex bubbles of length <= l*kmer_size and similarity >= s [200.95]
+            --merge-level: ~
+            #--prune-level: <int>          strength of low depth pruning (0-3) [2]
+            --prune-level: ~
+            #--prune-depth: <int>          remove unitigs with avg kmer depth less than this value [2]
+            --prune-depth: ~
+            #--low-local-ratio: <float>        ratio threshold to define low local coverage contigs [0.2]
+            --low-local-ratio: ~
+            #--max-tip-len: <int>          remove tips less than this value [2*k]
+            --max-tip-len: ~
+            #--no-local: disable local assembly
+            --no-local: ~
+            #--kmin-1pass: use 1pass mode to build SdBG of k_min
+            --kmin-1pass: ~
+            #-m: <float>        max memory in byte to be used in SdBG construction (if set between 0-1 fraction of the machine's total memory) [0.9]
+            -m: ~
+            #--mem-flag: <int>          SdBG builder memory mode 0: minimum; 1: moderate; others: use all memory specified by '-m/--memory' [1]
+            --mem-flag: ~
+            #-t: <int>          number of CPU threads [# of logical processors]
+            -t: ~
+            #--no-hw-accel: run MEGAHIT without BMI2 and POPCNT hardware instructions
+            --no-hw-accel: ~
+            #--min-contig-len: <int>          minimum length of contigs to output [200]
+            --min-contig-len: ~
+        spades:
+            enable: True
+            #--iontorrent: this flag is required for IonTorrent data
+            --iontorrent: ~
+            #--pacbio: <filename>  file with PacBio reads
+            --pacbio: ~
+            #--nanopore: <filename>  file with Nanopore reads
+            --nanopore: ~
+            #-t: <int>  number of threads [default: 16]
+            -t: ~
+            #-m: <int>  RAM limit for SPAdes in Gb (terminates if exceeded) [default: 250]
+            -m: ~
+            #-k: <int,int,...>  comma-separated list of k-mer sizes (must be odd and less than 128) [default: 'auto']
+            -k: ~
+            #--cov-cutoff: <float>  coverage cutoff value (a positive float number, or 'auto', or 'off') [default: 'off']
+            --cov-cutoff: ~
+            #--phred-offset: <33 or 64>  PHRED quality offset in the input reads (33 or 64) [default: auto-detect]
+            --phred-offset: ~
+        velvet:
+            enable: True
+            velveth:
+                #hash_length: EITHER an odd integer (if even, it will be decremented) <= 31 (if above, will be reduced) OR: m,M,s where m and M are odd integers (if not, they will be decremented) with m < M <= 31 (if above, will be reduced) and s is a step (even number). Velvet will then hash from k=m to k=M with a step of s
+                hash_length: ~
+                #-short: -shortPaired
+                -short: ~
+                #-short2: -shortPaired2
+                -short2: ~
+                #-long: -longPaired
+                -long: ~
+            velvetg:
+                #-cov_cutoff: <floating-point|auto>  : removal of low coverage nodes AFTER tour bus or allow the system to infer it (default: no removal)
+                -cov_cutoff: ~
+                #-ins_length: <integer>  : expected distance between two paired end reads (default: no read pairing)
+                -ins_length: ~
+                #-read_trkg: <yes|no>  : tracking of short read positions in assembly (default: no tracking)
+                -read_trkg: ~
+                #-min_contig_lgth: <integer> : minimum contig length exported to contigs.fa file (default: hash length * 2)
+                -min_contig_lgth: ~
+                #-amos_file: <yes|no>  : export assembly to AMOS file (default: no export)
+                -amos_file: ~
+                #-exp_cov: <floating point|auto> : expected coverage of unique regions or allow the system to infer it  (default: no long or paired-end read resolution)
+                -exp_cov: ~
+                #-long_cov_cutoff: <floating-point>: removal of nodes with low long-read coverage AFTER tour bus (default: no removal)
+                -long_cov_cutoff: ~
+                #-ins_length*: <integer>  : expected distance between two paired-end reads in the respective short-read dataset (default: no read pairing)
+                -ins_length*: ~
+                #-ins_length_long: <integer> : expected distance between two long paired-end reads (default: no read pairing)
+                -ins_length_long: ~
+                #-ins_length*_sd: <integer>  : est. standard deviation of respective dataset (default: 10% of corresponding length) [replace '*' by nothing, '2' or '_long' as necessary]
+                -ins_length*_sd: ~
+                #-scaffolding: <yes|no>  : scaffolding of contigs used paired end information (default: on)
+                -scaffolding: ~
+                #-max_branch_length: <integer>  : maximum length in base pair of bubble (default: 100)
+                -max_branch_length: ~
+                #-max_divergence: <floating-point>: maximum divergence rate between two branches in a bubble (default: 0.2)
+                -max_divergence: ~
+                #-max_gap_count: <integer>  : maximum number of gaps allowed in the alignment of the two branches of a bubble (default: 3)
+                -max_gap_count: ~
+                #-min_pair_count: <integer>  : minimum number of paired end connections to justify the scaffolding of two long contigs (default: 5)
+                -min_pair_count: ~
+                #-max_coverage: <floating point> : removal of high coverage nodes AFTER tour bus (default: no removal)
+                -max_coverage: ~
+                #-coverage_mask: <int> : minimum coverage required for confident regions of contigs (default: 1)
+                -coverage_mask: ~
+                #-long_mult_cutoff: <int>  : minimum number of long reads required to merge contigs (default: 2)
+                -long_mult_cutoff: ~
+                #-alignments: <yes|no>  : export a summary of contig alignment to the reference sequences (default: no)
+                -alignments: ~
+                #-exportFiltered: <yes|no>  : export the long nodes which were eliminated by the coverage filters (default: no)
+                -exportFiltered: ~
+                #-clean: <yes|no>  : remove all the intermediary files which are useless for recalculation (default : no)
+                -clean: ~
+                #-very_clean: <yes|no>  : remove all the intermediary files (no recalculation possible) (default: no)
+                -very_clean: ~
+                #-paired_exp_fraction: <double>  : remove all the paired end connections which less than the specified fraction of the expected count (default: 0.1)
+                -paired_exp_fraction: ~
+                #-conserveLong: <yes|no>  : preserve sequences with long reads in them (default no)
+                -conserveLong: ~
+        canu:
+            enable: True
+            #genomeSize=: The genome size should be your best guess of the haploid genome size of what is being assembled.  It is used primarily to estimate coverage in reads, NOT as the desired assembly size.  Fractional values are allowed: '4.7m' equals '4700k' equals '4700000'
+            genomeSize=: ~
+            -pacbio-raw: ~
+            -pacbio-corrected: ~
+            -nanopore-raw: ~
+            -nanopore-corrected: ~
+    ncbi_bacteria_blastn:
+        enable: True
+        #num_threads: Number of threads to use in the BLAST search (integer, at least one). Default is one. Incompatible with: remote
+        num_threads: ~
+        #evalue: Expectation value (E) threshold for saving hits Default = `10'
+        evalue: ~
+        #num_alignments: Number of database sequences to show alignments for Default = `250'
+        num_alignments: ~
+        #task: Task to execute (string, default 'megablast') Allowed values 'blastn', 'blastn-short', 'dc-megablast', 'megablast' (the default), or 'vecscreen'
+        task: ~
+        #c: Penalty for a nucleotide mismatch (integer, at most zero).
+        penalty: ~
+        #reward: Reward for a nucleotide match (integer, at least zero).
+        reward: ~
+        #dust: Filter query sequence with DUST (string). Format: 'yes', 'level window linker', or 'no' to disable. Default = '20 64 1'.
+        dust: ~
+        #filtering_db: BLAST database containing filtering elements (i.e. repeats).
+        filtering_db: ~
+        #window_masker_taxid: Enable WindowMasker filtering using a Taxonomic ID (integer).
+        window_masker_taxid: ~
+        #no_greedy: Use non-greedy dynamic programming extension
+        no_greedy: ~
+        #min_raw_gapped_score: Minimum raw gapped score to keep an alignment in the preliminary gapped and traceback stages (integer).
+        min_raw_gapped_score: ~
+        #ungapped: Perform ungapped alignment only?
+        ungapped: ~
+        #off_diagonal_range: Number of off-diagonals to search for the 2nd hit (integer). Expects a positive integer, or 0 (default) to turn off. Added in BLAST 2.2.23+
+        off_diagonal_range: ~
+    patric_blastn:
+        enable: True
+        #num_threads: Number of threads to use in the BLAST search (integer, at least one). Default is one. Incompatible with: remote
+        num_threads: ~
+        #evalue: Expectation value (E) threshold for saving hits Default = `10'
+        evalue: ~
+        #num_alignments: Number of database sequences to show alignments for Default = `250'
+        num_alignments: ~
+        #task: Task to execute (string, default 'megablast') Allowed values 'blastn', 'blastn-short', 'dc-megablast', 'megablast' (the default), or 'vecscreen'
+        task: ~
+        #c: Penalty for a nucleotide mismatch (integer, at most zero).
+        penalty: ~
+        #reward: Reward for a nucleotide match (integer, at least zero).
+        reward: ~
+        #dust: Filter query sequence with DUST (string). Format: 'yes', 'level window linker', or 'no' to disable. Default = '20 64 1'.
+        dust: ~
+        #filtering_db: BLAST database containing filtering elements (i.e. repeats).
+        filtering_db: ~
+        #window_masker_taxid: Enable WindowMasker filtering using a Taxonomic ID (integer).
+        window_masker_taxid: ~
+        #no_greedy: Use non-greedy dynamic programming extension
+        no_greedy: ~
+        #min_raw_gapped_score: Minimum raw gapped score to keep an alignment in the preliminary gapped and traceback stages (integer).
+        min_raw_gapped_score: ~
+        #ungapped: Perform ungapped alignment only?
+        ungapped: ~
+        #off_diagonal_range: Number of off-diagonals to search for the 2nd hit (integer). Expects a positive integer, or 0 (default) to turn off. Added in BLAST 2.2.23+
+        off_diagonal_range: ~
+    card_blastn:
+        enable: True
+        #num_threads: Number of threads to use in the BLAST search (integer, at least one). Default is one. Incompatible with: remote
+        num_threads: ~
+        #evalue: Expectation value (E) threshold for saving hits Default = `10'
+        evalue: ~
+        #num_alignments: Number of database sequences to show alignments for Default = `250'
+        num_alignments: ~
+        #task: Task to execute (string, default 'megablast') Allowed values 'blastn', 'blastn-short', 'dc-megablast', 'megablast' (the default), or 'vecscreen'
+        task: ~
+        #c: Penalty for a nucleotide mismatch (integer, at most zero).
+        penalty: ~
+        #reward: Reward for a nucleotide match (integer, at least zero).
+        reward: ~
+        #dust: Filter query sequence with DUST (string). Format: 'yes', 'level window linker', or 'no' to disable. Default = '20 64 1'.
+        dust: ~
+        #filtering_db: BLAST database containing filtering elements (i.e. repeats).
+        filtering_db: ~
+        #window_masker_taxid: Enable WindowMasker filtering using a Taxonomic ID (integer).
+        window_masker_taxid: ~
+        #no_greedy: Use non-greedy dynamic programming extension
+        no_greedy: ~
+        #min_raw_gapped_score: Minimum raw gapped score to keep an alignment in the preliminary gapped and traceback stages (integer).
+        min_raw_gapped_score: ~
+        #ungapped: Perform ungapped alignment only?
+        ungapped: ~
+        #off_diagonal_range: Number of off-diagonals to search for the 2nd hit (integer). Expects a positive integer, or 0 (default) to turn off. Added in BLAST 2.2.23+
+        off_diagonal_range: ~
+    drugbank_blastn:
+        enable: True
+        #num_threads: Number of threads to use in the BLAST search (integer, at least one). Default is one. Incompatible with: remote
+        num_threads: ~
+        #evalue: Expectation value (E) threshold for saving hits Default = `10'
+        evalue: ~
+        #num_alignments: Number of database sequences to show alignments for Default = `250'
+        num_alignments: ~
+        #task: Task to execute (string, default 'megablast') Allowed values 'blastn', 'blastn-short', 'dc-megablast', 'megablast' (the default), or 'vecscreen'
+        task: ~
+        #c: Penalty for a nucleotide mismatch (integer, at most zero).
+        penalty: ~
+        #reward: Reward for a nucleotide match (integer, at least zero).
+        reward: ~
+        #dust: Filter query sequence with DUST (string). Format: 'yes', 'level window linker', or 'no' to disable. Default = '20 64 1'.
+        dust: ~
+        #filtering_db: BLAST database containing filtering elements (i.e. repeats).
+        filtering_db: ~
+        #window_masker_taxid: Enable WindowMasker filtering using a Taxonomic ID (integer).
+        window_masker_taxid: ~
+        #no_greedy: Use non-greedy dynamic programming extension
+        no_greedy: ~
+        #min_raw_gapped_score: Minimum raw gapped score to keep an alignment in the preliminary gapped and traceback stages (integer).
+        min_raw_gapped_score: ~
+        #ungapped: Perform ungapped alignment only?
+        ungapped: ~
+        #off_diagonal_range: Number of off-diagonals to search for the 2nd hit (integer). Expects a positive integer, or 0 (default) to turn off. Added in BLAST 2.2.23+
+        off_diagonal_range: ~
+    prokka:
+        enable: ~
+        #--addgenes: Add 'gene' features for each 'CDS' feature (default OFF)
+        --addgenes: ~
+        #--addmrna: Add 'mRNA' features for each 'CDS' feature (default OFF)
+        --addmrna: ~
+        #--evalue: [n.n]     Similarity e-value cut-off (default '1e-09')
+        --evalue: ~
+        #--coverage: [n.n]   Minimum coverage on query protein (default '80')
+        --coverage: ~
+        #--cpus: [N]         Number of CPUs to use [0=all] (default '8')
+        --cpus: ~
+        #--mincontiglen: [N] Minimum contig size [NCBI needs 200] (default '1')
+        --mincontiglen: ~
+        #--rfam: Enable searching for ncRNAs with Infernal+Rfam (SLOW!) (default '0')
+        --rfam: ~
+        #--norrna: Don't run rRNA search (default OFF)
+        --norrna: ~
+        #--notrna: Don't run tRNA search (default OFF)
+        --notrna: ~
+        #--rnammer: Prefer RNAmmer over Barrnap for rRNA prediction (default OFF)
+        --rnammer: ~
+    prodigal:
+        enable: ~
